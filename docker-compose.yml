@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  file-upload:
+    build: .
+    ports:
+      - "9292:9292"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/file_upload_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+  db:
+    image: postgres:17
+    environment:
+      POSTGRESQL_ROOT_PASSWORD: password
+      POSTGRESQL_DATABASE: file_upload_db
+      POSTGRESQL_USER: user
+      POSTGRESQL_PASSWORD: password
+    ports:
+      - "5432:5432"
