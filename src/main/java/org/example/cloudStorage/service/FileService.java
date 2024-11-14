@@ -3,7 +3,7 @@ package org.example.cloudStorage.service;
 import org.example.cloudStorage.entity.File;
 import org.example.cloudStorage.entity.User;
 import org.example.cloudStorage.repository.FileRepository;
-import org.example.cloudStorage.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,11 +14,12 @@ import java.util.List;
 @Service
 public class FileService {
     private final FileRepository fileRepository;
-    private final UserRepository userRepository;
 
-    public FileService(FileRepository fileRepository, UserRepository userRepository) {
+
+    @Autowired
+    public FileService(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
-        this.userRepository = userRepository;
+
     }
 
     public List<File> getFiles(User user) {
@@ -37,5 +38,3 @@ public class FileService {
         fileRepository.deleteById(id);
     }
 }
-
-
