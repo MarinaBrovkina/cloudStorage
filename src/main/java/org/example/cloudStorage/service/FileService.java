@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -15,11 +17,9 @@ import java.util.List;
 public class FileService {
     private final FileRepository fileRepository;
 
-
     @Autowired
     public FileService(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
-
     }
 
     public List<File> getFiles(User user) {
@@ -28,9 +28,21 @@ public class FileService {
 
     public File uploadFile(MultipartFile file, User user) throws IOException {
         String originalFileName = file.getOriginalFilename();
-        String path = "uploads/" + originalFileName;
-        file.transferTo(Paths.get(path));
-        File newFile = new File(originalFileName, file.getSize(), path, user);
+        if (originalFileName == null) {
+            throw new IllegalArgumentException("Имя файла не может быть null");
+        }
+
+        Path uploadDir = Paths.get(System.getProperty("java.io.tmpdir"));
+        Files.createDirectories(uploadDir);
+
+        Path filePath = uploadDir.resolve(originalFileName);
+        file.transferTo(filePath);
+
+        File newFile = new File();
+        newFile.setName(originalFileName);
+        newFile.setSize(file.getSize());
+        newFile.setPath(filePath.toString());
+        newFile.setUser(user);
         return fileRepository.save(newFile);
     }
 
