@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - include:
+      file: tables/users.sql
+        - include:
+            file: tables/insert_users.sql
+        - include:
+            file: tables/files.sql
+

@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:22.0.1 as build
 
 EXPOSE 9292
 

@@ -1,27 +1,51 @@
 package org.example.cloudStorage.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Data
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+
+import java.time.LocalDateTime;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "files")
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private Long size;
-    private String path;
-    @ManyToOne
-    private User user;
 
-    public File(String name, Long size, String path, User user) {
-        this.name = name;
+    @Column (name = "filename", unique = true)
+    @NotNull
+    private String filename;
+
+    @Column (name = "edited_at")
+    private LocalDateTime editedAt;
+
+    @Column (name = "size")
+    @NotNull
+    private Long size;
+
+    @Column (name = "file_content")
+    @NotNull
+    private byte[] fileContent;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private org.example.cloudStorage.entity.User user;
+
+    public File(String filename, LocalDateTime editedAt, long size, byte[] fileContent, User user) {
+        this.filename = filename;
+        this.editedAt = editedAt;
         this.size = size;
-        this.path = path;
+        this.fileContent = fileContent;
         this.user = user;
     }
-
-    public File() {
-    }
 }
+
